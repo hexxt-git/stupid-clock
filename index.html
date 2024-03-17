@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stupid clock</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+    }
+</style>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    ctx.font = '14px Arial';
+    ctx.fillStyle = 'black'
+    ctx.strokeStyle = 'black'
+
+    let time = new Date();
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    let seconds = time.getSeconds();
+
+    
+    function drawHand(value, angle){
+        pos = [canvas.width/2, canvas.height/2];
+        for(let i = 0 ; i < 9 ; i++){
+            pos[0] += Math.cos(angle) * (15 + i);
+            pos[1] += Math.sin(angle) * (15 + i);
+            ctx.fillText(value, pos[0], pos[1]);
+        }
+    }
+
+    function drawClock() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        time = new Date();
+        hours = time.getHours()%12;
+        minutes = time.getMinutes();
+        seconds = time.getSeconds();
+
+        drawHand(hours, hours/12 * Math.PI*2 - Math.PI/2);
+        drawHand(minutes, minutes/60 * Math.PI*2 - Math.PI/2);
+        drawHand(seconds, seconds/60 * Math.PI*2 - Math.PI/2);
+
+        ctx.beginPath()
+        ctx.rect(canvas.width/2-200, canvas.height/2-200, 400, 400)
+        ctx.stroke()
+    }
+
+    setInterval(drawClock, 1000);
+
+</script>
